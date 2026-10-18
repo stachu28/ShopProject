@@ -16,7 +16,7 @@ public class Computer extends Product {
     private final int storageGb;
 
     public Computer(Long id, String name, BigDecimal price, int quantity,
-                    String processor, int ramGb, int storageGb) {
+                    @NonNull String processor, int ramGb, int storageGb) {
         super(id, name, price, quantity);
         this.processor = processor;
         this.ramGb = ramGb;
