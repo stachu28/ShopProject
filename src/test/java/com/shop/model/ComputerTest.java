@@ -24,4 +24,18 @@ public class ComputerTest {
         assertThrows(NullPointerException.class,
                 () -> new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, null, 16, 512));
     }
+
+    @Test
+    @DisplayName("Konstruktor odrzuca ujemny RAM")
+    void constructorRejectsNegativeRam() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, "M3", -1, 512));
+    }
+
+    @Test
+    @DisplayName("Konstruktor odrzuca ujemny dysk")
+    void constructorRejectsNegativeStorage() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, "M3", 16, -1));
+    }
 }

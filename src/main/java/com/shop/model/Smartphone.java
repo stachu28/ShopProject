@@ -6,27 +6,28 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
 @ToString(callSuper = true)
 public class Smartphone extends Product {
 
     @NonNull
-    private String color;
-    private int batteryCapacityMah;
-    private List<String> accessories = new ArrayList<>();
+    private final String color;
+    private final int batteryCapacityMah;
+    private final List<String> accessories = new ArrayList<>();
 
     public Smartphone(Long id, String name, BigDecimal price, int quantity,
                       @NonNull String color, int batteryCapacityMah) {
         super(id, name, price, quantity);
+        if (batteryCapacityMah < 0) {
+            throw new IllegalArgumentException("Pojemność baterii nie może być ujemna: " + batteryCapacityMah);
+        }
         this.color = color;
         this.batteryCapacityMah = batteryCapacityMah;
     }
 
-    public void addAccessory(String accessory) {
+    public void addAccessory(@NonNull String accessory) {
         accessories.add(accessory);
     }
 

@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SmartphoneTest {
 
@@ -37,5 +36,20 @@ public class SmartphoneTest {
         phone.addAccessory("Etui");
 
         assertEquals(List.of("Ładowarka", "Etui"), phone.getAccessories());
+    }
+
+    @Test
+    @DisplayName("Konstruktor odrzuca ujemną pojemność baterii")
+    void constructorRejectsNegativeBattery() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new Smartphone(1L, "Galaxy S24", new BigDecimal("3999.00"), 25, "Czarny", -1));
+    }
+
+    @Test
+    @DisplayName("addAccessory odrzuca null")
+    void addAccessoryRejectsNull() {
+        Smartphone phone = createSmartphone();
+        assertThrows(NullPointerException.class, () -> phone.addAccessory(null));
+        assertTrue(phone.getAccessories().isEmpty());
     }
 }

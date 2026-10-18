@@ -18,6 +18,8 @@ public class Computer extends Product {
     public Computer(Long id, String name, BigDecimal price, int quantity,
                     @NonNull String processor, int ramGb, int storageGb) {
         super(id, name, price, quantity);
+        if (ramGb < 0) throw new IllegalArgumentException("RAM nie może być ujemny: " + ramGb);
+        if (storageGb < 0) throw new IllegalArgumentException("Dysk nie może być ujemny: " + storageGb);
         this.processor = processor;
         this.ramGb = ramGb;
         this.storageGb = storageGb;
