@@ -20,7 +20,7 @@ public class Smartphone extends Product {
     private List<String> accessories = new ArrayList<>();
 
     public Smartphone(Long id, String name, BigDecimal price, int quantity,
-                      String color, int batteryCapacityMah) {
+                      @NonNull String color, int batteryCapacityMah) {
         super(id, name, price, quantity);
         this.color = color;
         this.batteryCapacityMah = batteryCapacityMah;
