@@ -7,7 +7,6 @@ import lombok.*;
 @Getter
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Product {
 
     @EqualsAndHashCode.Include
@@ -22,6 +21,13 @@ public abstract class Product {
     private BigDecimal price;
 
     private int quantity;
+
+    public Product(@NonNull Long id, @NonNull String name, @NonNull BigDecimal price, int quantity) {
+        this.id = id;
+        this.name = name;
+        setPrice(price);
+        setQuantity(quantity);
+    }
 
     public abstract ProductType getType();
 
