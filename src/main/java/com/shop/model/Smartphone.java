@@ -21,7 +21,7 @@ public class Smartphone extends Product {
                       @NonNull String color, int batteryCapacityMah) {
         super(id, name, price, quantity);
         if (batteryCapacityMah < 0) {
-            throw new IllegalArgumentException("Pojemność baterii nie może być ujemna: " + batteryCapacityMah);
+            throw new IllegalArgumentException("Battery capacity cannot be negative: " + batteryCapacityMah);
         }
         this.color = color;
         this.batteryCapacityMah = batteryCapacityMah;

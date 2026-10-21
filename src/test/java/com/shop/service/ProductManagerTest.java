@@ -31,15 +31,15 @@ public class ProductManagerTest {
     private ProductManager productManager;
 
     private static Electronics electronics(Long id) {
-        return new Electronics(id, "Produkt " + id, new BigDecimal("10"), 5);
+        return new Electronics(id, "Product " + id, new BigDecimal("10"), 5);
     }
 
     private static Computer computer(Long id) {
-        return new Computer(id, "Komputer " + id, new BigDecimal("5000"), 1, "M3", 16, 512);
+        return new Computer(id, "Computer " + id, new BigDecimal("5000"), 1, "M3", 16, 512);
     }
 
     @Test
-    @DisplayName("addProduct zapisuje produkt w repozytorium")
+    @DisplayName("addProduct saves product in repository")
     void addProductSaves() {
         Product product = electronics(1L);
         when(productRepository.existsById(1L)).thenReturn(false);
@@ -50,14 +50,14 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("addProduct odrzuca null")
+    @DisplayName("addProduct throws Null Pointer Exception in null product")
     void addProductRejectsNull() {
         assertThrows(NullPointerException.class, () -> productManager.addProduct(null));
         verifyNoInteractions(productRepository);
     }
 
     @Test
-    @DisplayName("addProduct odrzuca duplikat id")
+    @DisplayName("addProduct rejects duplicate id")
     void addProductRejectsDuplicateId() {
         when(productRepository.existsById(1L)).thenReturn(true);
 
@@ -66,7 +66,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("removeProduct usuwa produkt")
+    @DisplayName("removeProduct removes a product")
     void removeProductRemoves() {
         when(productRepository.existsById(1L)).thenReturn(true);
 
@@ -76,7 +76,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("removeProduct odrzuca brakujący produkt")
+    @DisplayName("removeProduct rejects missing product")
     void removeProductRejectsMissing() {
         when(productRepository.existsById(99L)).thenReturn(false);
 
@@ -85,17 +85,17 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("removeProduct odrzuca null")
+    @DisplayName("removeProduct throws Null Pointer Exception in null product")
     void removeProductRejectsNull() {
         assertThrows(NullPointerException.class, () -> productManager.removeProduct(null));
         verifyNoInteractions(productRepository);
     }
 
     @Test
-    @DisplayName("update zapisuje zaktualizowany produkt")
+    @DisplayName("update saves and updated product")
     void updateSavesProduct() {
         Product existing = electronics(1L);
-        Product updated = new Electronics(1L, "Nowa nazwa", new BigDecimal("20"), 3);
+        Product updated = new Electronics(1L, "New name", new BigDecimal("20"), 3);
         when(productRepository.findById(1L)).thenReturn(Optional.of(existing));
 
         productManager.update(updated);
@@ -104,7 +104,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("update odrzuca brakujący produkt")
+    @DisplayName("update rejects missing product")
     void updateRejectsMissing() {
         when(productRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -113,10 +113,10 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("update odrzuca zmianę typu produktu")
+    @DisplayName("update rejects product type change")
     void updateRejectsTypeChange() {
         Product existing = electronics(1L);
-        Product smartphone = new Smartphone(1L, "Phone", new BigDecimal("3999"), 1, "Czarny", 4000);
+        Product smartphone = new Smartphone(1L, "Phone", new BigDecimal("3999"), 1, "Black", 4000);
         when(productRepository.findById(1L)).thenReturn(Optional.of(existing));
 
         assertThrows(IllegalArgumentException.class, () -> productManager.update(smartphone));
@@ -124,14 +124,14 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("update odrzuca null")
+    @DisplayName("update throws Null Pointer Exception in null update")
     void updateRejectsNull() {
         assertThrows(NullPointerException.class, () -> productManager.update(null));
         verifyNoInteractions(productRepository);
     }
 
     @Test
-    @DisplayName("findById zwraca produkt z repozytorium")
+    @DisplayName("findById returns product from repository")
     void findByIdReturnsProduct() {
         Product product = electronics(1L);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
@@ -140,7 +140,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("findAll zwraca wszystkie produkty z repozytorium")
+    @DisplayName("findAll returns all products within repository")
     void findAllReturnsAllProducts() {
         List<Product> products = List.of(electronics(1L), computer(2L));
         when(productRepository.findAll()).thenReturn(products);
@@ -150,7 +150,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("findByType zwraca produkty danego typu z repozytorium")
+    @DisplayName("findByType returns all products with given type within repository")
     void findByTypeReturnsFilteredProducts() {
         List<Product> computers = List.of(computer(2L));
         when(productRepository.findByType(ProductType.COMPUTER)).thenReturn(computers);
@@ -160,7 +160,7 @@ public class ProductManagerTest {
     }
 
     @Test
-    @DisplayName("findByType odrzuca null")
+    @DisplayName("findByType throws Null Pointer Exception for null type")
     void findByTypeRejectsNull() {
         assertThrows(NullPointerException.class, () -> productManager.findByType(null));
         verifyNoInteractions(productRepository);

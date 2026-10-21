@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ComputerTest {
 
     @Test
-    @DisplayName("getType zwraca 'Computer'")
+    @DisplayName("getType returns 'Computer'")
     void getTypeReturnsComputer() {
         Computer computer = new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, "M3 Silicon", 16, 512);
 
@@ -19,21 +19,21 @@ public class ComputerTest {
     }
 
     @Test
-    @DisplayName("Konstruktor odrzuca null w nazwie procesora")
-    void constructorRejectsNullInRamName() {
+    @DisplayName("Constructor throws Null Pointer Exception for null processor")
+    void constructorRejectsNullProcessor() {
         assertThrows(NullPointerException.class,
                 () -> new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, null, 16, 512));
     }
 
     @Test
-    @DisplayName("Konstruktor odrzuca ujemny RAM")
+    @DisplayName("Constructor rejects negative RAM")
     void constructorRejectsNegativeRam() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, "M3", -1, 512));
     }
 
     @Test
-    @DisplayName("Konstruktor odrzuca ujemny dysk")
+    @DisplayName("Constructor rejects negative storage")
     void constructorRejectsNegativeStorage() {
         assertThrows(IllegalArgumentException.class,
                 () -> new Computer(1L, "MacBook Pro", new BigDecimal("8999.00"), 3, "M3", 16, -1));

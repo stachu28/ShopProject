@@ -33,14 +33,14 @@ public abstract class Product {
 
     public final void setPrice(@NonNull BigDecimal price) {
         if (price.signum() < 0) {
-            throw new IllegalArgumentException("Cena nie może być ujemna: " + price);
+            throw new IllegalArgumentException("Price cannot be negative: " + price);
         }
         this.price = price;
     }
 
     public final void setQuantity(int quantity) {
         if (quantity < 0) {
-            throw new IllegalArgumentException("Ilość nie może być ujemna: " + quantity);
+            throw new IllegalArgumentException("Quantity cannot be negative: " + quantity);
         }
         this.quantity = quantity;
     }

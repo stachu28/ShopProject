@@ -12,7 +12,7 @@ public class Cart {
 
     public void addItem(@NonNull Product product, @NonNull Integer quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Ilość musi być dodatnia: " + quantity);
+            throw new IllegalArgumentException("Quantity cannot be negative: " + quantity);
         }
         cartContent.merge(product, quantity, Integer::sum);
     }
@@ -42,5 +42,9 @@ public class Cart {
                 .map(e -> e.getKey().getPrice().multiply(BigDecimal.valueOf(e.getValue())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(2, java.math.RoundingMode.HALF_UP);
+    }
+
+    public Map<Product, Integer> getItems() {
+        return Map.copyOf(cartContent);
     }
 }
