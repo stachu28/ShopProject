@@ -31,11 +31,13 @@ public class SmartphoneTest {
     @DisplayName("addAccessory adds accessories")
     void addAccessoryAddsAccessories() {
         Smartphone phone = createSmartphone();
+        Accessory charger = new Accessory(10L, "Charger", BigDecimal.valueOf(149,99), 1);
+        Accessory phoneCase = new Accessory(11L, "Case", BigDecimal.valueOf(89,99), 1);
 
-        phone.addAccessory("Charger");
-        phone.addAccessory("Case");
+        phone.addAccessory(charger);
+        phone.addAccessory(phoneCase);
 
-        assertEquals(List.of("Charger", "Case"), phone.getAccessories());
+        assertEquals(List.of(charger, phoneCase), phone.getAccessories());
     }
 
     @Test
