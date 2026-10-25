@@ -54,4 +54,14 @@ public class SmartphoneTest {
         assertThrows(NullPointerException.class, () -> phone.addAccessory(null));
         assertTrue(phone.getAccessories().isEmpty());
     }
+
+    @Test
+    @DisplayName("addAccessory rejects product that is not an accessory")
+    void addAccessoryRejectsNonAccessory() {
+        Smartphone phone = createSmartphone();
+        Product headphones = new Electronics(2L, "Headphones", new BigDecimal("100.00"), 10);
+
+        assertThrows(IllegalArgumentException.class, () -> phone.addAccessory(headphones));
+        assertTrue(phone.getAccessories().isEmpty());
+    }
 }

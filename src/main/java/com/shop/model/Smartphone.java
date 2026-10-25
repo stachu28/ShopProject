@@ -33,6 +33,7 @@ public class Smartphone extends Product {
         }
         accessories.add(accessory);
     }
+
     @Override
     public ProductType getType() {
         return ProductType.SMARTPHONE;
