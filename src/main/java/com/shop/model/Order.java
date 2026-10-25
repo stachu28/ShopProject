@@ -34,7 +34,10 @@ public class Order {
         }
         this.customer = customer;
         this.items = Map.copyOf(items);
-        this.totalPrice = totalPrice.setScale(2, RoundingMode.HALF_UP);
+        this.totalPrice = items.entrySet().stream()
+                .map(e -> e.getKey().getPrice().multiply(BigDecimal.valueOf(e.getValue())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
         this.orderDate = orderDate;
     }
 }
