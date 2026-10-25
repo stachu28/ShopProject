@@ -39,6 +39,9 @@ public class OrderProcessor {
             Long id = orderedProduct.getId();
             Product stored = productRepository.findById(id)
                     .orElseThrow(() -> new ProductNotFoundException(id));
+            if (quantity == null || quantity <= 0) {
+                throw new IllegalArgumentException("Quantity must be positive: " + quantity);
+            }
             if (stored.getQuantity() < quantity) {
                 throw new OutOfStockException(id, stored.getQuantity(), quantity);
             }
