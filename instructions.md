@@ -43,7 +43,8 @@ zakupowe.
 **Task 4**: Implementacja funkcji dodawania produktów do koszyka, przeglądania koszyka oraz składania zamówienia.
 
 1. Obsługa Zamówień
-   Task 5: Stworzenie klasy Order reprezentującej zamówienie z informacjami o kliencie, produktach i sumie zamówienia.
+
+**Task 5**: Stworzenie klasy Order reprezentującej zamówienie z informacjami o kliencie, produktach i sumie zamówienia.
 
 **Task 6**: Implementacja OrderProcessor do przetwarzania zamówień oraz generowania faktur.
 
