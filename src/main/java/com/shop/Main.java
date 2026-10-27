@@ -1,11 +1,8 @@
 package com.shop;
 
 import com.shop.cli.ShopCli;
-import com.shop.model.Cart;
-import com.shop.model.Computer;
-import com.shop.model.Electronics;
+import com.shop.model.*;
 import com.shop.service.ProductManager;
-import com.shop.model.Smartphone;
 import com.shop.repository.InMemoryProductRepository;
 import com.shop.service.InvoiceGenerator;
 import com.shop.service.OrderProcessor;
@@ -32,5 +29,6 @@ public class Main {
         manager.addProduct(new Smartphone(2L, "Smartphone", new BigDecimal("3499.00"), 12, "Black", 4000));
         manager.addProduct(new Electronics(3L, "Headphones", new BigDecimal("299.00"), 30));
         manager.addProduct(new Electronics(4L, "Keyboard",   new BigDecimal("449.00"), 18));
+        manager.addProduct(new Accessory(5L, "Charger",   new BigDecimal("49.00"), 18));
     }
 }

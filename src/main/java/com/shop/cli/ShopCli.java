@@ -1,11 +1,6 @@
 package com.shop.cli;
 
-import com.shop.model.Address;
-import com.shop.model.Cart;
-import com.shop.model.Customer;
-import com.shop.model.Invoice;
-import com.shop.model.Order;
-import com.shop.model.Product;
+import com.shop.model.*;
 import com.shop.service.OrderProcessor;
 import com.shop.service.ProductManager;
 
@@ -78,9 +73,107 @@ public class ShopCli {
             System.out.println("Product with id " + id + " not found");
             return;
         }
+
+        boolean configured = configureIfNeeded(product);
+        if (configured) {
+            manager.update(product);
+        }
+
         int qty = readInt("Quantity: ");
         cart.addItem(product, qty);
         System.out.println("Added: " + product.getName() + " x" + qty);
+    }
+
+    private boolean configureIfNeeded(Product product) {
+        if (product instanceof Computer computer) {
+            return configureComputer(computer);
+        }
+        if (product instanceof Smartphone smartphone) {
+            return configureSmartphone(smartphone);
+        }
+        return false;
+    }
+
+    private boolean configureComputer(Computer computer) {
+        System.out.println("Configure computer (press Enter to keep current value):");
+
+        System.out.printf("  Processor [%s]: ", computer.getProcessor());
+        String proc = readLine();
+        if (!proc.isEmpty()) {
+            computer.setProcessor(proc);
+        }
+
+        Integer ram = readOptionalNonNegativeInt("RAM GB", computer.getRamGb());
+        if (ram != null) {
+            computer.setRamGb(ram);
+        }
+
+        Integer storage = readOptionalNonNegativeInt("Storage GB", computer.getStorageGb());
+        if (storage != null) {
+            computer.setStorageGb(storage);
+        }
+        return true;
+    }
+
+    private boolean configureSmartphone(Smartphone smartphone) {
+        System.out.println("Configure smartphone (press Enter to keep current value):");
+
+        System.out.printf("  Color [%s]: ", smartphone.getColor());
+        String color = readLine();
+        if (!color.isEmpty()) {
+            smartphone.setColor(color);
+        }
+
+        Integer battery = readOptionalNonNegativeInt("Battery mAh", smartphone.getBatteryCapacityMah());
+        if (battery != null) {
+            smartphone.setBatteryCapacityMah(battery);
+        }
+
+        while (true) {
+            System.out.print("Add accessory by id (empty to finish): ");
+            String accId = readLine();
+            if (accId.isEmpty()) break;
+
+            long id;
+            try {
+                id = Long.parseLong(accId);
+            } catch (NumberFormatException e) {
+                System.out.println("Not a number, try again.");
+                continue;
+            }
+
+            Product acc = manager.findById(id).orElse(null);
+            if (acc == null) {
+                System.out.println("Product with id " + id + " not found");
+                continue;
+            }
+            if (acc.getType() != ProductType.ACCESSORY) {
+                System.out.println("Product " + id + " is not an accessory");
+                continue;
+            }
+            smartphone.addAccessory(acc);
+            System.out.println("Accessory added: " + acc.getName());
+        }
+        return true;
+    }
+
+    private Integer readOptionalNonNegativeInt(String label, int current) {
+        System.out.printf("  %s [%d]: ", label, current);
+        String s = readLine();
+        if (s.isEmpty()) {
+            return null;
+        }
+        try {
+            int v = Integer.parseInt(s);
+            if (v < 0) {
+                System.out.println("Value cannot be negative, keeping current.");
+                return null;
+            }
+            return v;
+        } catch (NumberFormatException e) {
+            System.out.println("Not a number, keeping current.");
+            return null;
+        }
     }
 
     private void showCart() {

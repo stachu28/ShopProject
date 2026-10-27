@@ -13,17 +13,28 @@ import lombok.ToString;
 public class Smartphone extends Product {
 
     @NonNull
-    private final String color;
-    private final int batteryCapacityMah;
+    private String color;
+    private int batteryCapacityMah;
     private final List<Product> accessories = new ArrayList<>();
 
     public Smartphone(Long id, String name, BigDecimal price, int quantity,
                       @NonNull String color, int batteryCapacityMah) {
         super(id, name, price, quantity);
+        setColor(color);
+        setBatteryCapacityMah(batteryCapacityMah);
+    }
+
+    public void setColor(@NonNull String color) {
+        if (color.isBlank()) {
+            throw new IllegalArgumentException("Color cannot be blank");
+        }
+        this.color = color;
+    }
+
+    public void setBatteryCapacityMah(int batteryCapacityMah) {
         if (batteryCapacityMah < 0) {
             throw new IllegalArgumentException("Battery capacity cannot be negative: " + batteryCapacityMah);
         }
-        this.color = color;
         this.batteryCapacityMah = batteryCapacityMah;
     }
 

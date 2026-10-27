@@ -11,17 +11,36 @@ import java.math.BigDecimal;
 public class Computer extends Product {
 
     @NonNull
-    private final String processor;
-    private final int ramGb;
-    private final int storageGb;
+    private String processor;
+    private int ramGb;
+    private int storageGb;
 
     public Computer(Long id, String name, BigDecimal price, int quantity,
                     @NonNull String processor, int ramGb, int storageGb) {
         super(id, name, price, quantity);
-        if (ramGb < 0) throw new IllegalArgumentException("RAM size cannot be negative: " + ramGb);
-        if (storageGb < 0) throw new IllegalArgumentException("Memory drive cannot be negative: " + storageGb);
+        setProcessor(processor);
+        setRamGb(ramGb);
+        setStorageGb(storageGb);
+    }
+
+    public void setProcessor(@NonNull String processor) {
+        if (processor.isBlank()) {
+            throw new IllegalArgumentException("Processor cannot be blank");
+        }
         this.processor = processor;
+    }
+
+    public void setRamGb(int ramGb) {
+        if (ramGb < 0) {
+            throw new IllegalArgumentException("RAM size cannot be negative: " + ramGb);
+        }
         this.ramGb = ramGb;
+    }
+
+    public void setStorageGb(int storageGb) {
+        if (storageGb < 0) {
+            throw new IllegalArgumentException("Memory drive cannot be negative: " + storageGb);
+        }
         this.storageGb = storageGb;
     }
 
