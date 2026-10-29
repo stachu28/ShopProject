@@ -32,7 +32,7 @@ class ProductTest {
 
         assertEquals(1L, product.getId());
         assertEquals("Headphones", product.getName());
-        assertEquals(new BigDecimal("100"), product.getPrice());
+        assertEquals(new BigDecimal("100.00"), product.getPrice());
         assertEquals(10, product.getQuantity());
     }
 
@@ -59,7 +59,7 @@ class ProductTest {
     void zeroPriceAndQuantityAreAllowed() {
         Product product = new TestProduct(1L, "Gratis", BigDecimal.ZERO, 0);
 
-        assertEquals(BigDecimal.ZERO, product.getPrice());
+        assertEquals(new BigDecimal("0.00"), product.getPrice());
         assertEquals(0, product.getQuantity());
     }
 
@@ -99,12 +99,28 @@ class ProductTest {
     }
 
     @Test
+    @DisplayName("setPrice scales price to two decimals HALF_UP")
+    void setPriceScalesToTwoDecimals() {
+        Product product = createProduct();
+
+        product.setPrice(new BigDecimal("10.005"));
+        assertEquals(new BigDecimal("10.01"), product.getPrice());
+
+        product.setPrice(new BigDecimal("10.004"));
+        assertEquals(new BigDecimal("10.00"), product.getPrice());
+
+        product.setPrice(new BigDecimal("10"));
+        assertEquals(new BigDecimal("10.00"), product.getPrice());
+        assertEquals(2, product.getPrice().scale());
+    }
+
+    @Test
     @DisplayName("setPrice rejects negative price and does not implement changes")
     void setPriceRejectsNegative() {
         Product product = createProduct();
 
         assertThrows(IllegalArgumentException.class, () -> product.setPrice(new BigDecimal("-0.01")));
-        assertEquals(new BigDecimal("100"), product.getPrice());
+        assertEquals(new BigDecimal("100.00"), product.getPrice());
     }
 
     @Test
@@ -113,7 +129,7 @@ class ProductTest {
         Product product = createProduct();
 
         assertThrows(NullPointerException.class, () -> product.setPrice(null));
-        assertEquals(new BigDecimal("100"), product.getPrice());
+        assertEquals(new BigDecimal("100.00"), product.getPrice());
     }
 
     @Test

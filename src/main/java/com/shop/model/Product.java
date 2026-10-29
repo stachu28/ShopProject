@@ -1,6 +1,7 @@
 package com.shop.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import lombok.*;
 
@@ -35,7 +36,7 @@ public abstract class Product {
         if (price.signum() < 0) {
             throw new IllegalArgumentException("Price cannot be negative: " + price);
         }
-        this.price = price;
+        this.price = price.setScale(2, RoundingMode.HALF_UP);
     }
 
     public final void setQuantity(int quantity) {
