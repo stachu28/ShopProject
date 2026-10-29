@@ -24,13 +24,9 @@ public class Order {
 
     public Order(@NonNull Customer customer,
                  @NonNull Map<Product, Integer> items,
-                 @NonNull BigDecimal totalPrice,
                  @NonNull LocalDateTime orderDate) {
         if (items.isEmpty()) {
             throw new IllegalArgumentException("Order cannot be empty");
-        }
-        if (totalPrice.signum() < 0) {
-            throw new IllegalArgumentException("Total price cannot be negative: " + totalPrice);
         }
         this.customer = customer;
         this.items = Map.copyOf(items);

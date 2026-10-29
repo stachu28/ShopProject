@@ -3,6 +3,7 @@ package com.shop.service;
 import com.shop.exceptions.OutOfStockException;
 import com.shop.exceptions.ProductNotFoundException;
 import com.shop.model.*;
+import com.shop.repository.OrderRepository;
 import com.shop.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,40 +35,47 @@ public class OrderProcessorTest {
     @Mock
     private InvoiceGenerator invoiceGenerator;
 
+    @Mock
+    private OrderRepository orderRepository;
+
     private OrderProcessor orderProcessor;
 
     @BeforeEach
     void setUp() {
-        orderProcessor = new OrderProcessor(productRepository, invoiceGenerator);
+        orderProcessor = new OrderProcessor(productRepository, invoiceGenerator, orderRepository);
     }
 
     private static Order orderWith(Map<Product, Integer> items) {
-        BigDecimal total = items.entrySet().stream()
-                .map(e -> e.getKey().getPrice().multiply(BigDecimal.valueOf(e.getValue())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return new Order(CUSTOMER, items, total, DATE);
+        return new Order(CUSTOMER, items, DATE);
     }
 
 
     @Test
-    @DisplayName("Constructor throws Null Pointer Exception for null repository")
-    void constructorRejectsNullRepository() {
+    @DisplayName("Constructor throws Null Pointer Exception for null product repository")
+    void constructorRejectsNullProductRepository() {
         assertThrows(NullPointerException.class,
-                () -> new OrderProcessor(null, invoiceGenerator));
+                () -> new OrderProcessor(null, invoiceGenerator, orderRepository));
     }
 
     @Test
     @DisplayName("Constructor throws Null Pointer Exception for null generator")
     void constructorRejectsNullGenerator() {
         assertThrows(NullPointerException.class,
-                () -> new OrderProcessor(productRepository, null));
+                () -> new OrderProcessor(productRepository, null, orderRepository));
+    }
+
+    @Test
+    @DisplayName("Constructor throws Null Pointer Exception for null order repository")
+    void constructorRejectsNullOrderRepository() {
+        assertThrows(NullPointerException.class,
+                () -> new OrderProcessor(productRepository, invoiceGenerator, null));
     }
 
     @Test
     @DisplayName("processOrder throws Null Pointer Exception for null order")
     void processRejectsNullOrder() {
         assertThrows(NullPointerException.class, () -> orderProcessor.processOrder(null));
-        verifyNoInteractions(productRepository, invoiceGenerator);
+        verifyNoInteractions(productRepository, invoiceGenerator, orderRepository);
     }
 
     @Test
@@ -86,10 +94,11 @@ public class OrderProcessorTest {
         assertEquals(7, product.getQuantity());
         verify(productRepository).save(product);
         verify(invoiceGenerator).generate(order);
+        verify(orderRepository).save(order);
     }
 
     @Test
-    @DisplayName("processOrder throws ProductNotFoundException")
+    @DisplayName("processOrder throws ProductNotFoundException and does not save order")
     void processThrowsWhenProductNotFound() {
         Product product = new Electronics(1L, "X", new BigDecimal("10.00"), 10);
         Order order = orderWith(Map.of(product, 1));
@@ -98,10 +107,11 @@ public class OrderProcessorTest {
 
         assertThrows(ProductNotFoundException.class,
                 () -> orderProcessor.processOrder(order));
+        verifyNoInteractions(orderRepository, invoiceGenerator);
     }
 
     @Test
-    @DisplayName("processOrder throws OutOfStockException")
+    @DisplayName("processOrder throws OutOfStockException and does not save order")
     void processThrowsWhenStockInsufficient() {
         Product product = new Electronics(1L, "X", new BigDecimal("10.00"), 2);
         Order order = orderWith(Map.of(product, 5));
@@ -110,5 +120,36 @@ public class OrderProcessorTest {
 
         assertThrows(OutOfStockException.class,
                 () -> orderProcessor.processOrder(order));
+        verifyNoInteractions(orderRepository, invoiceGenerator);
+    }
+
+    @Test
+    @DisplayName("processOrder does not save order when invoice generation fails")
+    void processDoesNotSaveOrderWhenInvoiceFails() {
+        Product product = new Electronics(1L, "X", new BigDecimal("10.00"), 10);
+        Order order = orderWith(Map.of(product, 1));
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(invoiceGenerator.generate(order)).thenThrow(new RuntimeException("boom"));
+
+        assertThrows(RuntimeException.class, () -> orderProcessor.processOrder(order));
+        verifyNoInteractions(orderRepository);
+        assertEquals(10, product.getQuantity(), "stock must not be decreased");
+        verify(productRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("processOrder does not decrease stock when order save fails")
+    void processDoesNotDecreaseStockWhenSaveFails() {
+        Product product = new Electronics(1L, "X", new BigDecimal("10.00"), 10);
+        Order order = orderWith(Map.of(product, 1));
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(invoiceGenerator.generate(order)).thenReturn(new Invoice("INV/1", order));
+        doThrow(new RuntimeException("db down")).when(orderRepository).save(order);
+
+        assertThrows(RuntimeException.class, () -> orderProcessor.processOrder(order));
+        assertEquals(10, product.getQuantity(), "stock must not be decreased");
+        verify(productRepository, never()).save(any());
     }
 }

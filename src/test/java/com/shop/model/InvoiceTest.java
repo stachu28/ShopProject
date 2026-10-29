@@ -19,7 +19,7 @@ public class InvoiceTest {
 
     private static Order orderWithTotal(String total) {
         Product p = new Electronics(1L, "X", new BigDecimal(total), 10);
-        return new Order(CUSTOMER, Map.of(p, 1), new BigDecimal(total), DATE);
+        return new Order(CUSTOMER, Map.of(p, 1), DATE);
     }
 
     @Test

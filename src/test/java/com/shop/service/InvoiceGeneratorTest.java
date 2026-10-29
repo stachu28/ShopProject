@@ -26,7 +26,7 @@ public class InvoiceGeneratorTest {
 
     private static Order testOrder(LocalDateTime date) {
         Product p = new Electronics(1L, "X", new BigDecimal("10.00"), 10);
-        return new Order(CUSTOMER, Map.of(p, 1), new BigDecimal("10.00"), date);
+        return new Order(CUSTOMER, Map.of(p, 1), date);
     }
 
     @Test

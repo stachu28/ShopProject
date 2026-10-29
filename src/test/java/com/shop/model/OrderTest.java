@@ -36,7 +36,7 @@ class OrderTest {
     @Test
     @DisplayName("Constructor sets all fields")
     void constructorSetsAllFields() {
-        Order order = new Order(customer, items(), new BigDecimal("5200.00"), orderDate);
+        Order order = new Order(customer, items(), orderDate);
 
         assertEquals(customer, order.getCustomer());
         assertEquals(2, order.getItems().size());
@@ -48,42 +48,28 @@ class OrderTest {
     @DisplayName("Constructor rejects null customer")
     void constructorRejectsNullCustomer() {
         assertThrows(NullPointerException.class,
-                () -> new Order(null, items(), new BigDecimal("5200.00"), orderDate));
+                () -> new Order(null, items(), orderDate));
     }
 
     @Test
     @DisplayName("Constructor rejects null items")
     void constructorRejectsNullItems() {
         assertThrows(NullPointerException.class,
-                () -> new Order(customer, null, new BigDecimal("5200.00"), orderDate));
-    }
-
-    @Test
-    @DisplayName("Constructor rejects null total price")
-    void constructorRejectsNullTotalPrice() {
-        assertThrows(NullPointerException.class,
-                () -> new Order(customer, items(), null, orderDate));
+                () -> new Order(customer, null, orderDate));
     }
 
     @Test
     @DisplayName("Constructor rejects null order date")
     void constructorRejectsNullOrderDate() {
         assertThrows(NullPointerException.class,
-                () -> new Order(customer, items(), new BigDecimal("5200.00"), null));
+                () -> new Order(customer, items(), null));
     }
 
     @Test
     @DisplayName("Constructor rejects empty items")
     void constructorRejectsEmptyItems() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Order(customer, Map.of(), new BigDecimal("0.00"), orderDate));
-    }
-
-    @Test
-    @DisplayName("Constructor rejects negative total price")
-    void constructorRejectsNegativeTotalPrice() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new Order(customer, items(), new BigDecimal("-1.00"), orderDate));
+                () -> new Order(customer, Map.of(), orderDate));
     }
 
     @Test
@@ -92,7 +78,7 @@ class OrderTest {
         Map<Product, Integer> mutable = new HashMap<>();
         mutable.put(headphones, 2);
 
-        Order order = new Order(customer, mutable, new BigDecimal("200.00"), orderDate);
+        Order order = new Order(customer, mutable, orderDate);
         mutable.put(computer, 1);
 
         assertEquals(1, order.getItems().size());
@@ -101,10 +87,16 @@ class OrderTest {
     }
 
     @Test
-    @DisplayName("Constructor scales total price to 2 decimal places")
-    void constructorScalesTotalPrice() {
-        Order order = new Order(customer, items(), new BigDecimal("5200.005"), orderDate);
+    @DisplayName("Total price has scale 2")
+    void totalPriceHasScaleTwo() {
+        Order order = new Order(customer, items(), orderDate);
+        assertEquals(2, order.getTotalPrice().scale());
+    }
 
-        assertEquals(new BigDecimal("5200.01"), order.getTotalPrice());
+    @Test
+    @DisplayName("Total price multiplies quantity")
+    void totalPriceMultipliesQuantity() {
+        Order order = new Order(customer, Map.of(headphones, 3), orderDate);
+        assertEquals(new BigDecimal("300.00"), order.getTotalPrice());
     }
 }

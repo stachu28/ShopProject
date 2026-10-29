@@ -203,7 +203,6 @@ public class ShopCli {
         Order order = new Order(
                 customer,
                 cart.getItems(),
-                cart.totalPrice(),
                 LocalDateTime.now());
 
         Invoice invoice = processor.processOrder(order);
