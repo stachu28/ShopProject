@@ -5,6 +5,7 @@ import com.shop.exceptions.ProductNotFoundException;
 import com.shop.model.Invoice;
 import com.shop.model.Order;
 import com.shop.model.Product;
+import com.shop.repository.OrderRepository;
 import com.shop.repository.ProductRepository;
 
 import java.util.LinkedHashMap;
@@ -15,21 +16,26 @@ public class OrderProcessor {
 
     private final ProductRepository productRepository;
     private final InvoiceGenerator invoiceGenerator;
+    private final OrderRepository orderRepository;
 
-    public OrderProcessor(ProductRepository repository, InvoiceGenerator invoice) {
+    public OrderProcessor(ProductRepository repository, InvoiceGenerator invoice, OrderRepository orderRepository) {
         this.productRepository = Objects.requireNonNull(repository, "Repository cannot be null");
         this.invoiceGenerator = Objects.requireNonNull(invoice, "Invoice Generator cannot be null");
+        this.orderRepository = Objects.requireNonNull(orderRepository, "Order Repository cannot be null");
     }
 
     public Invoice processOrder(Order order) {
         Objects.requireNonNull(order, "Order cannot be null");
 
         Map<Product, Integer> reservations = reserveStock(order);
+        Invoice invoice = invoiceGenerator.generate(order);
+        orderRepository.save(order);
+
         reservations.forEach((product, quantity) -> {
             product.setQuantity(product.getQuantity() - quantity);
             productRepository.save(product);
         });
-        return invoiceGenerator.generate(order);
+        return invoice;
     }
 
     private Map<Product, Integer> reserveStock(Order order) {
