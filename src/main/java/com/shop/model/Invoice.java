@@ -5,7 +5,7 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public record Invoice(@NonNull String number, @NonNull Order order) {
+public record Invoice(@NonNull String number, @NonNull Order order, @NonNull Discount discount) {
 
     public static final BigDecimal VAT_RATE = new BigDecimal("0.23");
 
@@ -15,8 +15,14 @@ public record Invoice(@NonNull String number, @NonNull Order order) {
         }
     }
 
+    public BigDecimal discountAmount() {
+        return order.getTotalPrice()
+                .multiply(discount.discountRate())
+                .setScale(2, RoundingMode.HALF_UP);
+    }
+
     public BigDecimal netAmount() {
-        return order.getTotalPrice();
+        return order.getTotalPrice().subtract(discountAmount());
     }
 
     public BigDecimal vatAmount() {

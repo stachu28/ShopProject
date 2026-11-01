@@ -3,6 +3,7 @@ package com.shop;
 import com.shop.cli.ShopCli;
 import com.shop.model.*;
 import com.shop.repository.InMemoryOrderRepository;
+import com.shop.service.DiscountService;
 import com.shop.service.ProductManager;
 import com.shop.repository.InMemoryProductRepository;
 import com.shop.service.InvoiceGenerator;
@@ -17,12 +18,14 @@ public class Main {
         InMemoryProductRepository productRepository = new InMemoryProductRepository();
         InMemoryOrderRepository orderRepository = new InMemoryOrderRepository();
         ProductManager manager = new ProductManager(productRepository);
-        OrderProcessor processor = new OrderProcessor(productRepository, new InvoiceGenerator(), orderRepository);
+
+        DiscountService discountService = new DiscountService();
+        OrderProcessor processor = new OrderProcessor(productRepository, new InvoiceGenerator(discountService), orderRepository);
 
         seed(manager);
 
         try (Scanner scanner = new Scanner(System.in)) {
-            new ShopCli(scanner, manager, new Cart(), processor).run();
+            new ShopCli(scanner, manager, new Cart(), processor, discountService).run();
         }
     }
 

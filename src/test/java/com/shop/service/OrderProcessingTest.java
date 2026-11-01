@@ -36,7 +36,8 @@ class OrderProcessingTest {
     private static OrderProcessor newProcessor(Product product) {
         ProductRepository repository = new InMemoryProductRepository();
         repository.save(product);
-        return new OrderProcessor(repository, new InvoiceGenerator(), new InMemoryOrderRepository());
+        return new OrderProcessor(repository, new InvoiceGenerator(new DiscountService()),
+                new InMemoryOrderRepository());
     }
 
     private static List<Order> newOrders(Product product) {

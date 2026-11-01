@@ -21,7 +21,7 @@ public class InvoiceGeneratorTest {
 
     @BeforeEach
     void setUp() {
-        invoiceGenerator = new InvoiceGenerator();
+        invoiceGenerator = new InvoiceGenerator(new DiscountService());
     }
 
     private static Order testOrder(LocalDateTime date) {

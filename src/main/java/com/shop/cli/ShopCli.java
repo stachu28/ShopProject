@@ -1,6 +1,7 @@
 package com.shop.cli;
 
 import com.shop.model.*;
+import com.shop.service.DiscountService;
 import com.shop.service.OrderProcessor;
 import com.shop.service.ProductManager;
 
@@ -21,6 +22,7 @@ public class ShopCli {
             2. Add product to cart
             3. Show cart
             4. Place order
+            5. Discounts on/off
             0. Exit
             """;
 
@@ -28,12 +30,15 @@ public class ShopCli {
     private final ProductManager manager;
     private final Cart cart;
     private final OrderProcessor processor;
+    private final DiscountService discountService;
 
-    public ShopCli(Scanner scanner, ProductManager manager, Cart cart, OrderProcessor processor) {
+    public ShopCli(Scanner scanner, ProductManager manager, Cart cart, OrderProcessor processor,
+                   DiscountService discountService) {
         this.scanner = scanner;
         this.manager = manager;
         this.cart = cart;
         this.processor = processor;
+        this.discountService = discountService;
     }
 
     public void run() {
@@ -47,6 +52,7 @@ public class ShopCli {
                     case "2" -> addProductToCart();
                     case "3" -> showCart();
                     case "4" -> checkout();
+                    case "5" -> setDiscount();
                     case "0" -> {
                         System.out.println("Bye.");
                         return;
@@ -57,6 +63,12 @@ public class ShopCli {
                 System.out.println("Error: " + e.getMessage());
             }
         }
+    }
+
+    private void setDiscount() {
+        boolean nowEnabled = !discountService.isEnabled();
+        discountService.setEnabled(nowEnabled);
+        System.out.println("Discounts are now " + (nowEnabled ? "ON" : "OFF"));
     }
 
     private void showProducts() {

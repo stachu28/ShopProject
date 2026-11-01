@@ -28,6 +28,7 @@ public class OrderProcessorTest {
             new Address("Długa 1", "Płock", "09-400", "Poland"));
 
     private static final LocalDateTime DATE = LocalDateTime.of(2026, 10, 23, 12, 0);
+    private static final Discount NO_DISCOUNT = new Discount(BigDecimal.ZERO, "No discount");
 
     @Mock
     private ProductRepository productRepository;
@@ -83,7 +84,7 @@ public class OrderProcessorTest {
     void processDecreasesStockAndReturnsInvoice() {
         Product product = new Electronics(1L, "Headphones", new BigDecimal("100.00"), 10);
         Order order = orderWith(Map.of(product, 3));
-        Invoice expected = new Invoice("INV/2026/00001", order);
+        Invoice expected = new Invoice("INV/2026/00001", order, NO_DISCOUNT);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(invoiceGenerator.generate(order)).thenReturn(expected);
@@ -145,7 +146,7 @@ public class OrderProcessorTest {
         Order order = orderWith(Map.of(product, 1));
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        when(invoiceGenerator.generate(order)).thenReturn(new Invoice("INV/1", order));
+        when(invoiceGenerator.generate(order)).thenReturn(new Invoice("INV/1", order, NO_DISCOUNT));
         doThrow(new RuntimeException("db down")).when(orderRepository).save(order);
 
         assertThrows(RuntimeException.class, () -> orderProcessor.processOrder(order));
