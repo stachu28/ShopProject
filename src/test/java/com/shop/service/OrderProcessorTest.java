@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,7 +28,7 @@ public class OrderProcessorTest {
             "Anna Nowak", "anna@example.com",
             new Address("Długa 1", "Płock", "09-400", "Poland"));
 
-    private static final LocalDateTime DATE = LocalDateTime.of(2026, 10, 23, 12, 0);
+    private static final ZonedDateTime DATE = ZonedDateTime.of(2026, 10, 23, 12, 0, 0, 0, Order.SHOP_ZONE);
     private static final Discount NO_DISCOUNT = new Discount(BigDecimal.ZERO, "No discount");
 
     @Mock

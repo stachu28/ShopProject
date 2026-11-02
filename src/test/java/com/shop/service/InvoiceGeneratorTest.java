@@ -6,7 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +25,7 @@ public class InvoiceGeneratorTest {
         invoiceGenerator = new InvoiceGenerator(new DiscountService());
     }
 
-    private static Order testOrder(LocalDateTime date) {
+    private static Order testOrder(ZonedDateTime date) {
         Product p = new Electronics(1L, "X", new BigDecimal("10.00"), 10);
         return new Order(CUSTOMER, Map.of(p, 1), date);
     }
@@ -38,7 +39,7 @@ public class InvoiceGeneratorTest {
     @Test
     @DisplayName("Returned invoice references the same order")
     void invoiceReferencesOrder() {
-        Order order = testOrder(LocalDateTime.of(2026, 10, 23, 12, 0));
+        Order order = testOrder(ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0, ZoneId.of("Europe/Warsaw")));
         Invoice invoice = invoiceGenerator.generate(order);
 
         assertSame(order, invoice.order());
@@ -47,7 +48,8 @@ public class InvoiceGeneratorTest {
     @Test
     @DisplayName("Number contains year taken from order date")
     void numberContainsYear() {
-        Invoice invoice = invoiceGenerator.generate(testOrder(LocalDateTime.of(2026, 5, 1, 12, 0)));
+        Invoice invoice = invoiceGenerator.generate(testOrder(ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0,
+                ZoneId.of("Europe/Warsaw"))));
 
         assertTrue(invoice.number().contains("2026"),
                 "Number should contain year: " + invoice.number());
@@ -56,7 +58,7 @@ public class InvoiceGeneratorTest {
     @Test
     @DisplayName("Consecutive calls produce unique numbers")
     void consecutiveCallsProduceUniqueNumbers() {
-        Order order = testOrder(LocalDateTime.of(2026, 10, 23, 12, 0));
+        Order order = testOrder(ZonedDateTime.of(2026, 10, 23, 12, 0, 0, 0, Order.SHOP_ZONE));
 
         Invoice a = invoiceGenerator.generate(order);
         Invoice b = invoiceGenerator.generate(order);

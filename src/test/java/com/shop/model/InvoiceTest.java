@@ -4,7 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,7 +16,7 @@ public class InvoiceTest {
             "Anna Nowak", "anna@example.com",
             new Address("Poznańska 47", "Warszawa", "02-200", "Poland"));
 
-    private static final LocalDateTime DATE = LocalDateTime.of(2026, 10, 23, 12, 0);
+    private static final ZonedDateTime DATE = ZonedDateTime.of(2026, 10, 23, 12, 0, 0, 0, ZoneId.of("Europe/Warsaw"));
     private static final Discount NO_DISCOUNT = new Discount(BigDecimal.ZERO, "No discount");
 
 

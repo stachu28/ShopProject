@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
@@ -27,7 +28,7 @@ class OrderProcessingTest {
     private static final Customer CUSTOMER = new Customer(
             "Anna Nowak", "anna@example.com",
             new Address("Długa 1", "Warszawa", "02-222", "Poland"));
-    private static final LocalDateTime DATE = LocalDateTime.of(2026, 10, 23, 12, 0);
+    private static final ZonedDateTime DATE = ZonedDateTime.of(2026, 10, 23, 12, 0, 0, 0, Order.SHOP_ZONE);
 
     private static Product newProduct() {
         return new Electronics(1L, "X", new BigDecimal("10.00"), ORDERS_COUNT);

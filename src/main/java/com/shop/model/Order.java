@@ -6,7 +6,8 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Getter
@@ -20,11 +21,13 @@ public class Order {
     @NonNull
     private final BigDecimal totalPrice;
     @NonNull
-    private final LocalDateTime orderDate;
+    private final ZonedDateTime orderDate;
+
+    public static final ZoneId SHOP_ZONE = ZoneId.of("Europe/Warsaw");
 
     public Order(@NonNull Customer customer,
                  @NonNull Map<Product, Integer> items,
-                 @NonNull LocalDateTime orderDate) {
+                 @NonNull ZonedDateTime orderDate) {
         if (items.isEmpty()) {
             throw new IllegalArgumentException("Order cannot be empty");
         }

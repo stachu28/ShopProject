@@ -6,7 +6,7 @@ import com.shop.service.OrderProcessor;
 import com.shop.service.ProductManager;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -215,7 +215,7 @@ public class ShopCli {
         Order order = new Order(
                 customer,
                 cart.getItems(),
-                LocalDateTime.now());
+                ZonedDateTime.now(Order.SHOP_ZONE));
 
         Invoice invoice = processor.processOrder(order);
         cart.clear();

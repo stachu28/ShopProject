@@ -6,7 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,7 +17,7 @@ class DiscountServiceTest {
     private static final Customer CUSTOMER = new Customer(
             "Krzysztof Nowak", "krzysztof@example.com",
             new Address("Mazowiecka 1", "Warszawa", "02-200", "Poland"));
-    private static final LocalDateTime DATE = LocalDateTime.of(2026, 10, 28, 12, 0);
+    private static final ZonedDateTime DATE = ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0, ZoneId.of("Europe/Warsaw"));
 
     private DiscountService discountService;
 
