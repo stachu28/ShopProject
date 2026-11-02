@@ -221,9 +221,14 @@ public class ShopCli {
         cart.clear();
 
         System.out.printf("%n=== INVOICE %s ===%n", invoice.number());
-        System.out.printf("Net:   %.2f zł%n", invoice.netAmount().doubleValue());
-        System.out.printf("VAT:   %.2f zł%n", invoice.vatAmount().doubleValue());
-        System.out.printf("Total: %.2f zł%n", invoice.grossAmount().doubleValue());
+        System.out.printf("Subtotal: %.2f zł%n", invoice.order().getTotalPrice().doubleValue());
+        if (invoice.discountAmount().compareTo(BigDecimal.ZERO) > 0) {
+            System.out.printf("Discount (%s): -%.2f zł%n",
+                    invoice.discount().reason(), invoice.discountAmount().doubleValue());
+        }
+        System.out.printf("Net:      %.2f zł%n", invoice.netAmount().doubleValue());
+        System.out.printf("VAT:      %.2f zł%n", invoice.vatAmount().doubleValue());
+        System.out.printf("Total:    %.2f zł%n", invoice.grossAmount().doubleValue());
     }
 
     private String readLine() {
