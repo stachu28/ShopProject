@@ -37,3 +37,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
+projekt.txt
+.idea/
