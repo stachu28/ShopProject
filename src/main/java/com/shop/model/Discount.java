@@ -4,6 +4,9 @@ import lombok.NonNull;
 
 import java.math.BigDecimal;
 
+/**
+ * Discount given to an order: a rate between 0 and 1 (e.g. 0.10 = 10%) and the reason for it.
+ */
 public record Discount(@NonNull BigDecimal discountRate, @NonNull String reason) {
 
     public Discount {
