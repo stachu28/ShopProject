@@ -2,6 +2,9 @@ package com.shop.model;
 
 import lombok.NonNull;
 
+/**
+ * Postal address of a customer.
+ */
 public record Address(@NonNull String street,
                       @NonNull String city,
                       @NonNull String postalCode,

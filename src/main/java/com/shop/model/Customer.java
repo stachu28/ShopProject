@@ -2,6 +2,9 @@ package com.shop.model;
 
 import lombok.NonNull;
 
+/**
+ * Shop customer with a name, an email and an address.
+ */
 public record Customer(@NonNull String name, @NonNull String email, @NonNull Address address) {
 
     public Customer {
