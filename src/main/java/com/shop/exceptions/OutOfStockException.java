@@ -1,5 +1,8 @@
 package com.shop.exceptions;
 
+/**
+ * Thrown when there is not enough stock to fulfil an order.
+ */
 public class OutOfStockException extends RuntimeException {
 
     public OutOfStockException(Long productId, int available, int requested) {

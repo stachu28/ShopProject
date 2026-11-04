@@ -6,6 +6,9 @@ import com.shop.model.ProductType;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Product repository that keeps products in memory (safe to use from many threads).
+ */
 public class InMemoryProductRepository implements ProductRepository {
 
     private final Map<Long, Product> storage = new ConcurrentHashMap<>();

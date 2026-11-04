@@ -12,6 +12,9 @@ import com.shop.service.OrderProcessor;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+/**
+ * Starts the shop: creates the services and repositories, adds sample products and runs the menu.
+ */
 public class Main {
 
     public static void main(String[] args) {

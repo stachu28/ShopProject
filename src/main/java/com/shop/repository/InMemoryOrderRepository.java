@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Order repository that keeps orders in memory (safe to use from many threads).
+ */
 public class InMemoryOrderRepository implements OrderRepository {
 
     private final List<Order> storage = Collections.synchronizedList(new ArrayList<>());

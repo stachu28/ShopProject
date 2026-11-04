@@ -10,6 +10,9 @@ import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Console menu of the shop: show products, fill the cart, place orders, toggle discounts.
+ */
 public class ShopCli {
 
     private static final Address DEFAULT_ADDRESS =

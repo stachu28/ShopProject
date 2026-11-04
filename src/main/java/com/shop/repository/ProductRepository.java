@@ -6,6 +6,9 @@ import com.shop.model.ProductType;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Storage for products.
+ */
 public interface ProductRepository {
 
     void save(Product product);
