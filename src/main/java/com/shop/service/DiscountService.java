@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
+/**
+ * Calculates discounts for orders. Discounts are off by default.
+ */
 public class DiscountService {
 
     private boolean enabled = false;
@@ -19,6 +22,7 @@ public class DiscountService {
         return enabled;
     }
 
+    /** Returns 20% for orders from 10000, 10% from 5000, otherwise no discount (always none when disabled). */
     public Discount calculateDiscount(Order order) {
         Objects.requireNonNull(order, "Order cannot be null");
         BigDecimal total = order.getTotalPrice();

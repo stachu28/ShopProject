@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Adds, removes, updates and finds products in the repository.
+ */
 public class ProductManager {
 
     private final ProductRepository repository;

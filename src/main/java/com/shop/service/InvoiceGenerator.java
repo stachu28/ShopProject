@@ -7,6 +7,9 @@ import com.shop.model.Order;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Creates invoices with unique numbers, e.g. INV/2026/00001.
+ */
 public class InvoiceGenerator {
 
     private static final String INVOICE_FORMAT = "INV/%d/%05d";
