@@ -6,6 +6,9 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ * Computer with a processor, RAM and storage size.
+ */
 @Getter
 @ToString(callSuper = true)
 public class Computer extends Product {

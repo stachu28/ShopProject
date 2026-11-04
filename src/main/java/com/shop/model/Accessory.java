@@ -4,6 +4,9 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ * Accessory that can be added to a smartphone, e.g. a charger.
+ */
 @ToString(callSuper = true)
 public class Accessory extends Product {
 

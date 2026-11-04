@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 import lombok.ToString;
 
+/**
+ * General electronic device, e.g. headphones or a keyboard.
+ */
 @ToString(callSuper = true)
 public class Electronics extends Product {
 

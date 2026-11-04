@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
+/**
+ * Smartphone with a color, battery capacity and a list of accessories.
+ */
 @Getter
 @ToString(callSuper = true)
 public class Smartphone extends Product {
