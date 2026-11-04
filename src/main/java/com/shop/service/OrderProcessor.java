@@ -17,6 +17,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Processes orders: checks stock, creates the invoice, saves the order and decreases stock.
+ */
 public class OrderProcessor {
 
     private static final int THREADS_COUNT = 10;
@@ -32,6 +35,7 @@ public class OrderProcessor {
         this.orderRepository = Objects.requireNonNull(orderRepository, "Order Repository cannot be null");
     }
 
+    /** Processes orders in parallel on a thread pool; faster than the sync version. */
     public List<Invoice> processOrdersSync(List<Order> orders) {
         Objects.requireNonNull(orders, "Orders cannot be null");
         return orders.stream()
@@ -54,6 +58,12 @@ public class OrderProcessor {
         }
     }
 
+    /**
+     * Processes one order. Stock is changed only if the whole order succeeds.
+     *
+     * @throws com.shop.exceptions.ProductNotFoundException if a product is not in the repository
+     * @throws com.shop.exceptions.OutOfStockException if there is not enough stock
+     */
     public Invoice processOrder(Order order) {
         Objects.requireNonNull(order, "Order cannot be null");
 

@@ -8,6 +8,9 @@ import com.shop.repository.ProductRepository;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Adds and removes products in a cart, looking them up in the product repository.
+ */
 public class CartService {
 
     private final ProductRepository productRepository;
