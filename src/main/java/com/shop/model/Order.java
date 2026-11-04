@@ -10,6 +10,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
+/**
+ * Customer order: items, total price and the date it was placed.
+ */
 @Getter
 @ToString
 public class Order {
@@ -23,8 +26,14 @@ public class Order {
     @NonNull
     private final ZonedDateTime orderDate;
 
+    /** Time zone used for all order dates in the shop. */
     public static final ZoneId SHOP_ZONE = ZoneId.of("Europe/Warsaw");
 
+    /**
+     * Creates an order and calculates its total price.
+     *
+     * @throws IllegalArgumentException if the order has no items
+     */
     public Order(@NonNull Customer customer,
                  @NonNull Map<Product, Integer> items,
                  @NonNull ZonedDateTime orderDate) {
