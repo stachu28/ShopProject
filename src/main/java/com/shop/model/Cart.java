@@ -6,10 +6,18 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Shopping cart that holds products and their quantities.
+ */
 public class Cart {
 
     private final Map<Product, Integer> cartContent = new LinkedHashMap<>();
 
+    /**
+     * Adds a product to the cart; adding the same product again increases its quantity.
+     *
+     * @throws IllegalArgumentException if the quantity is not positive
+     */
     public void addItem(@NonNull Product product, @NonNull Integer quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity cannot be negative: " + quantity);
