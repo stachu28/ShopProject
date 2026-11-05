@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +23,7 @@ class OrderTest {
         customer = new Customer("Anna Nowak", "anna@example.com", new Address("Długa 1", "Płock", "09-400", "Poland"));
         headphones = new Electronics(1L, "Headphones", new BigDecimal("100.00"), 10);
         computer = new Computer(2L, "Laptop", new BigDecimal("5000.00"), 5, "M3", 16, 512);
-        orderDate = ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0, ZoneId.of("Europe/Warsaw"));
+        orderDate = ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0, Order.SHOP_ZONE);
     }
 
     private Map<Product, Integer> items() {

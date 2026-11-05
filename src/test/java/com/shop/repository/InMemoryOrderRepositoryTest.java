@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ class InMemoryOrderRepositoryTest {
     private static final Address ADDRESS = new Address("Prosta 1", "Gliwice", "02-300", "Poland");
     private static final Customer ANNA = new Customer("Anna Nowak", "anna@example.com", ADDRESS);
     private static final Customer JAN = new Customer("Jan Kowalski", "jan@example.com", ADDRESS);
-    private static final ZonedDateTime DATE = ZonedDateTime.of(2026, 10, 23, 12, 0, 0, 0, ZoneId.of("Europe/Warsaw"));
+    private static final ZonedDateTime DATE = ZonedDateTime.of(2026, 10, 23, 12, 0, 0, 0, Order.SHOP_ZONE);
 
     private InMemoryOrderRepository repository;
 

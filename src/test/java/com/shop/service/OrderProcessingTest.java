@@ -9,10 +9,10 @@ import com.shop.model.Product;
 import com.shop.repository.InMemoryOrderRepository;
 import com.shop.repository.InMemoryProductRepository;
 import com.shop.repository.ProductRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +48,7 @@ class OrderProcessingTest {
     }
 
     @Test
+    @DisplayName("Async processing is faster than sync and decreases stock for all orders")
     void shouldProcessOrdersFasterAsynchronously() {
         Product syncProduct = newProduct();
         OrderProcessor syncProcessor = newProcessor(syncProduct);

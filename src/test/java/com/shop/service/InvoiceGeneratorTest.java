@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class InvoiceGeneratorTest {
     @Test
     @DisplayName("Returned invoice references the same order")
     void invoiceReferencesOrder() {
-        Order order = testOrder(ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0, ZoneId.of("Europe/Warsaw")));
+        Order order = testOrder(ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0, Order.SHOP_ZONE));
         Invoice invoice = invoiceGenerator.generate(order);
 
         assertSame(order, invoice.order());
@@ -49,7 +48,7 @@ public class InvoiceGeneratorTest {
     @DisplayName("Number contains year taken from order date")
     void numberContainsYear() {
         Invoice invoice = invoiceGenerator.generate(testOrder(ZonedDateTime.of(2026, 10, 21, 12, 30, 0, 0,
-                ZoneId.of("Europe/Warsaw"))));
+                Order.SHOP_ZONE)));
 
         assertTrue(invoice.number().contains("2026"),
                 "Number should contain year: " + invoice.number());

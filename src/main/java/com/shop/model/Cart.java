@@ -5,6 +5,7 @@ import lombok.NonNull;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.math.RoundingMode;
 
 /**
  * Shopping cart that holds products and their quantities.
@@ -49,7 +50,7 @@ public class Cart {
         return cartContent.entrySet().stream()
                 .map(e -> e.getKey().getPrice().multiply(BigDecimal.valueOf(e.getValue())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .setScale(2, java.math.RoundingMode.HALF_UP);
+                .setScale(2, RoundingMode.HALF_UP);
     }
 
     public Map<Product, Integer> getItems() {

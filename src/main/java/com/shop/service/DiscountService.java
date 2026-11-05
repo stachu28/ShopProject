@@ -4,7 +4,6 @@ import com.shop.model.Discount;
 import com.shop.model.Order;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
@@ -34,12 +33,5 @@ public class DiscountService {
             return new Discount(new BigDecimal("0.10"), "Order over 5000");
         }
         return new Discount(BigDecimal.ZERO, "No discount");
-    }
-
-    public BigDecimal calculateDiscountAmount(Order order) {
-        Discount discount = calculateDiscount(order);
-        return order.getTotalPrice()
-                .multiply(discount.discountRate())
-                .setScale(2, RoundingMode.HALF_UP);
     }
 }
