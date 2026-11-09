@@ -1,6 +1,7 @@
 package com.shop;
 
 import com.shop.cli.ShopCli;
+import com.shop.config.Settings;
 import com.shop.model.*;
 import com.shop.repository.InMemoryOrderRepository;
 import com.shop.service.DiscountService;
@@ -24,6 +25,8 @@ public class Main {
 
         DiscountService discountService = new DiscountService();
         OrderProcessor processor = new OrderProcessor(productRepository, new InvoiceGenerator(discountService), orderRepository);
+
+        System.out.println("Witaj w " + Settings.INSTANCE.getShopName() + "!");
 
         seed(manager);
 

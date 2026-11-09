@@ -1,5 +1,6 @@
 package com.shop.model;
 
+import com.shop.config.Settings;
 import lombok.NonNull;
 
 import java.math.BigDecimal;
@@ -9,9 +10,6 @@ import java.math.RoundingMode;
  * Invoice for an order, with the discount applied before VAT.
  */
 public record Invoice(@NonNull String number, @NonNull Order order, @NonNull Discount discount) {
-
-    /** VAT rate in Poland (23%). */
-    public static final BigDecimal VAT_RATE = new BigDecimal("0.23");
 
     public Invoice {
         if (number.isBlank()) {
@@ -31,7 +29,7 @@ public record Invoice(@NonNull String number, @NonNull Order order, @NonNull Dis
     }
 
     public BigDecimal vatAmount() {
-        return netAmount().multiply(VAT_RATE).setScale(2, RoundingMode.HALF_UP);
+        return netAmount().multiply(Settings.INSTANCE.getVatRate()).setScale(2, RoundingMode.HALF_UP);
     }
 
     public BigDecimal grossAmount() {

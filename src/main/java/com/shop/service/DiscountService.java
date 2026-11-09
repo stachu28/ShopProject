@@ -1,5 +1,6 @@
 package com.shop.service;
 
+import com.shop.config.Settings;
 import com.shop.model.Discount;
 import com.shop.model.Order;
 
@@ -25,11 +26,12 @@ public class DiscountService {
     public Discount calculateDiscount(Order order) {
         Objects.requireNonNull(order, "Order cannot be null");
         BigDecimal total = order.getTotalPrice();
+        Settings settings = Settings.INSTANCE;
 
-        if (enabled && total.compareTo(new BigDecimal("10000")) >= 0) {
+        if (enabled && total.compareTo(settings.getBigOrderLimit()) >= 0) {
             return new Discount(new BigDecimal("0.20"), "Order over 10000");
         }
-        if (enabled && total.compareTo(new BigDecimal("5000")) >= 0) {
+        if (enabled && total.compareTo(settings.getOrderLimit()) >= 0) {
             return new Discount(new BigDecimal("0.10"), "Order over 5000");
         }
         return new Discount(BigDecimal.ZERO, "No discount");
