@@ -1,5 +1,6 @@
 package com.shop.model;
 
+import com.shop.config.Settings;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
@@ -27,7 +28,7 @@ public class Order {
     private final ZonedDateTime orderDate;
 
     /** Time zone used for all order dates in the shop. */
-    public static final ZoneId SHOP_ZONE = ZoneId.of("Europe/Warsaw");
+    public static final ZoneId SHOP_ZONE = Settings.SHOP_ZONE;
 
     /**
      * Creates an order and calculates its total price.
@@ -47,5 +48,10 @@ public class Order {
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .setScale(2, RoundingMode.HALF_UP);
         this.orderDate = orderDate;
+    }
+
+    /** Returns a builder pre-configured with shop defaults. */
+    public static OrderBuilder builder() {
+        return new OrderBuilder();
     }
 }

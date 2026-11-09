@@ -6,7 +6,6 @@ import com.shop.service.OrderProcessor;
 import com.shop.service.ProductManager;
 
 import java.math.BigDecimal;
-import java.time.ZonedDateTime;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -215,10 +214,10 @@ public class ShopCli {
         String email = readText("Your email: ");
         Customer customer = new Customer(name, email, DEFAULT_ADDRESS);
 
-        Order order = new Order(
-                customer,
-                cart.getItems(),
-                ZonedDateTime.now(Order.SHOP_ZONE));
+        Order order = Order.builder()
+                .customer(customer)
+                .items(cart.getItems())
+                .build();
 
         Invoice invoice = processor.processOrder(order);
         cart.clear();
