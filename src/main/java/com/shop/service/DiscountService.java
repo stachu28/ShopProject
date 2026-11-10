@@ -1,6 +1,5 @@
 package com.shop.service;
 
-import com.shop.config.Settings;
 import com.shop.model.Discount;
 import com.shop.model.Order;
 import lombok.Getter;
@@ -14,9 +13,7 @@ import java.util.Objects;
  * Calculates discounts for orders. Discounts are off by default.
  */
 public class DiscountService {
-
-    private static final Discount NO_DISCOUNT = new Discount(BigDecimal.ZERO, "No discount");
-
+    
     @Getter
     @Setter
     private boolean enabled = false;
@@ -24,10 +21,6 @@ public class DiscountService {
     @Setter
     @NonNull
     private DiscountStrategy strategy = DiscountStrategy.ORDER_VALUE;
-
-//    @Setter
-//    private boolean enabled = false;
-//    private DiscountStrategy strategy = DiscountStrategy.ORDER_VALUE;
 
     /**
      * Returns 20% for orders from 10000, 10% from 5000, otherwise no discount (always none when disabled).
