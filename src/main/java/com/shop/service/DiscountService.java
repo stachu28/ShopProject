@@ -3,6 +3,9 @@ package com.shop.service;
 import com.shop.config.Settings;
 import com.shop.model.Discount;
 import com.shop.model.Order;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -12,28 +15,28 @@ import java.util.Objects;
  */
 public class DiscountService {
 
+    private static final Discount NO_DISCOUNT = new Discount(BigDecimal.ZERO, "No discount");
+
+    @Getter
+    @Setter
     private boolean enabled = false;
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+    @Setter
+    @NonNull
+    private DiscountStrategy strategy = DiscountStrategy.ORDER_VALUE;
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+//    @Setter
+//    private boolean enabled = false;
+//    private DiscountStrategy strategy = DiscountStrategy.ORDER_VALUE;
 
-    /** Returns 20% for orders from 10000, 10% from 5000, otherwise no discount (always none when disabled). */
+    /**
+     * Returns 20% for orders from 10000, 10% from 5000, otherwise no discount (always none when disabled).
+     */
     public Discount calculateDiscount(Order order) {
         Objects.requireNonNull(order, "Order cannot be null");
-        BigDecimal total = order.getTotalPrice();
-        Settings settings = Settings.INSTANCE;
-
-        if (enabled && total.compareTo(settings.getBigOrderLimit()) >= 0) {
-            return new Discount(new BigDecimal("0.20"), "Order over 10000");
+        if (!enabled) {
+            return new Discount(BigDecimal.ZERO, "No discount");
         }
-        if (enabled && total.compareTo(settings.getOrderLimit()) >= 0) {
-            return new Discount(new BigDecimal("0.10"), "Order over 5000");
-        }
-        return new Discount(BigDecimal.ZERO, "No discount");
+        return strategy.calculate(order);
     }
 }
