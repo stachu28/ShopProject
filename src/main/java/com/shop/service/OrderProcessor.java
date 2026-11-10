@@ -27,15 +27,20 @@ public class OrderProcessor {
     private final ProductRepository productRepository;
     private final InvoiceGenerator invoiceGenerator;
     private final OrderRepository orderRepository;
+    private final OrderValidator validator;
     private final Object stockLock = new Object();
+
 
     public OrderProcessor(ProductRepository repository, InvoiceGenerator invoice, OrderRepository orderRepository) {
         this.productRepository = Objects.requireNonNull(repository, "Repository cannot be null");
         this.invoiceGenerator = Objects.requireNonNull(invoice, "Invoice Generator cannot be null");
         this.orderRepository = Objects.requireNonNull(orderRepository, "Order Repository cannot be null");
+        this.validator = OrderValidator.forStock(productRepository);
     }
 
-    /** Processes orders in parallel on a thread pool; faster than the sync version. */
+    /**
+     * Processes orders in parallel on a thread pool; faster than the sync version.
+     */
     public List<Invoice> processOrdersSync(List<Order> orders) {
         Objects.requireNonNull(orders, "Orders cannot be null");
         return orders.stream()
@@ -62,7 +67,7 @@ public class OrderProcessor {
      * Processes one order. Stock is changed only if the whole order succeeds.
      *
      * @throws com.shop.exceptions.ProductNotFoundException if a product is not in the repository
-     * @throws com.shop.exceptions.OutOfStockException if there is not enough stock
+     * @throws com.shop.exceptions.OutOfStockException      if there is not enough stock
      */
     public Invoice processOrder(Order order) {
         Objects.requireNonNull(order, "Order cannot be null");
@@ -70,6 +75,7 @@ public class OrderProcessor {
         simulateLongOrderProcessing();
 
         synchronized (stockLock) {
+            validator.validate(order);
             Map<Product, Integer> reservations = reserveStock(order);
             Invoice invoice = invoiceGenerator.generate(order);
             orderRepository.save(order);
@@ -93,19 +99,8 @@ public class OrderProcessor {
 
     private Map<Product, Integer> reserveStock(Order order) {
         Map<Product, Integer> reservations = new LinkedHashMap<>();
-
-        order.getItems().forEach((orderedProduct, quantity) -> {
-            Long id = orderedProduct.getId();
-            Product stored = productRepository.findById(id)
-                    .orElseThrow(() -> new ProductNotFoundException(id));
-            if (quantity == null || quantity <= 0) {
-                throw new IllegalArgumentException("Quantity must be positive: " + quantity);
-            }
-            if (stored.getQuantity() < quantity) {
-                throw new OutOfStockException(id, stored.getQuantity(), quantity);
-            }
-            reservations.put(stored, quantity);
-        });
+        order.getItems().forEach((orderedProduct, quantity) ->
+                reservations.put(productRepository.findById(orderedProduct.getId()).orElseThrow(), quantity));
         return reservations;
     }
 }
