@@ -3,7 +3,9 @@ package com.shop;
 import com.shop.cli.ShopCli;
 import com.shop.config.Settings;
 import com.shop.model.*;
+import com.shop.proxy.LoggingProxy;
 import com.shop.repository.InMemoryOrderRepository;
+import com.shop.repository.ProductRepository;
 import com.shop.service.DiscountService;
 import com.shop.service.ProductManager;
 import com.shop.repository.InMemoryProductRepository;
@@ -19,7 +21,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryProductRepository productRepository = new InMemoryProductRepository();
+        ProductRepository productRepository =
+                LoggingProxy.withLogging(new InMemoryProductRepository(), ProductRepository.class);
         InMemoryOrderRepository orderRepository = new InMemoryOrderRepository();
         ProductManager manager = new ProductManager(productRepository);
 

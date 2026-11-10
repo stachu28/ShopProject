@@ -13,7 +13,7 @@ import java.util.Objects;
  * Calculates discounts for orders. Discounts are off by default.
  */
 public class DiscountService {
-    
+
     @Getter
     @Setter
     private boolean enabled = false;
